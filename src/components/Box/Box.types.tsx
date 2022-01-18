@@ -1,5 +1,5 @@
-import { Mesh } from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Group } from 'three';
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -13,4 +13,9 @@ export type GLTFResult = GLTF & {
   materials: {
     ['default']: THREE.MeshStandardMaterial;
   };
+};
+
+export type BoxProps = {
+  children?: React.ReactNode;
+  setDimensions: (value: number[]) => void;
 };

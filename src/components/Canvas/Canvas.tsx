@@ -1,15 +1,18 @@
 import { Suspense, useState } from 'react';
 //import threejs related modules
-import { Mesh } from 'three';
 import { Canvas } from '@react-three/fiber';
 import { PerspectiveCamera, OrbitControls, Stats } from '@react-three/drei';
 //import canvas wrapper
 import { CanvasWrapper } from './Canvas.css';
 //import custom components
 import Box from '../Box/Box';
-import Sphere from '../Sphere/Sphere';
 
 const CanvasViewer = () => {
+  const [dimensions, setDimension] = useState<number[]>([0, 0, 0]);
+
+  const handleDimensions = (value: number[]) => {
+    setDimension(value);
+  };
   return (
     <CanvasWrapper>
       <Canvas>
@@ -21,7 +24,7 @@ const CanvasViewer = () => {
         <PerspectiveCamera makeDefault position={[-9, 5, 10]} />
         <OrbitControls />
         <Suspense fallback={null}>
-          <Box></Box>
+          <Box setDimensions={handleDimensions}></Box>
         </Suspense>
         <Stats />
       </Canvas>
