@@ -6,7 +6,6 @@ import { PerspectiveCamera, OrbitControls, Stats } from '@react-three/drei';
 import { CanvasWrapper } from './Canvas.css';
 import Box from '../Box/Box';
 import Sphere from '../Sphere/Sphere';
-import Slider from '../helpers/Slider/Slider';
 
 const CanvasViewer = () => {
   //box dimensions state
@@ -21,16 +20,11 @@ const CanvasViewer = () => {
     setDimension(value);
     setIsReady(true);
   };
-
   const handleNumberOfSpheres = (value: number) => {
     setNumberOfSpheres(value);
   };
   return (
     <CanvasWrapper>
-      <Slider
-        numberOfSpheres={numberOfSpheres}
-        setNumberOfSpheres={handleNumberOfSpheres}
-      />
       <Canvas>
         <color attach="background" args={['black']} />
         <ambientLight intensity={0.5} />
