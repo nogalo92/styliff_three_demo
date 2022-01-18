@@ -7,10 +7,11 @@ This project is created as a demo for a Styliff Tech, as a part of interview.
 Project represent the objects of the same shape (Spheres) bouncing around in the confided space (Box).
 
 Project includes:
--Box Container component (external GLB file)
--Sphere Component to create instances of spheres
--Basic algorithm for calculating the dimensions (bounding box) of the loaded external file.
--Basic algorithm for detecting the collisions between the Box and the Spheres
+
+- Box Container component (external GLB file)
+- Sphere Component to create instances of spheres
+- Basic algorithm for calculating the dimensions (bounding box) of the loaded external file.
+- Basic algorithm for detecting the collisions between the Box and the Spheres
 
 ## Available Scripts
 
@@ -36,11 +37,13 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Dependencies
 
-Project is relying on the following dependencies to acheive this effect: -[react-three-fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
+Project is relying on the following dependencies to acheive this effect:
 
--[@react-three/drei](https://docs.pmnd.rs/drei/introduction)
+- [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
 
--[three](https://threejs.org/docs/#manual/en/introduction/Installation)
+- [@react-three/drei](https://docs.pmnd.rs/drei/introduction)
+
+- [three](https://threejs.org/docs/#manual/en/introduction/Installation)
 
 ## TODO
 
