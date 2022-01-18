@@ -37,9 +37,9 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Dependencies
 
-Project is relying on the following dependencies to acheive this effect:
+Project is relying on the following dependencies:
 
-- [react-three-fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
+- [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
 
 - [@react-three/drei](https://docs.pmnd.rs/drei/introduction)
 
