@@ -18,4 +18,5 @@ export type GLTFResult = GLTF & {
 export type BoxProps = {
   children?: React.ReactNode;
   setDimensions: (value: number[]) => void;
+  setWalls: (value: Group) => void;
 };

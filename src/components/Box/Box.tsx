@@ -48,6 +48,7 @@ const Box = (props: BoxProps) => {
     });
     //set dimensions state
     props.setDimensions([box_width, box_height, box_depth]);
+    props.setWalls(boxGroup.current);
   }, []);
 
   return (

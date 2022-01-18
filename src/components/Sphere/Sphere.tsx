@@ -1,6 +1,6 @@
 import { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from 'react-three-fiber';
-import { InstancedMesh, Object3D, Vector3, Matrix4 } from 'three';
+import { InstancedMesh, Object3D, Vector3, Matrix4, Mesh } from 'three';
 //import types
 import { SphereProps } from './Sphere.types';
 //temp Object3D object used for setting up instances od the sphere
@@ -29,8 +29,12 @@ const Sphere = (props: SphereProps) => {
   const padding = 0.2;
   //velocities of the sphere instances
   const velocities: Vector3[] = [];
-  const matrix = new Matrix4();
+  //vector3 for storing new positions
   const position = new Vector3();
+  //matrix for storing position transformations
+  const matrix = new Matrix4();
+  //array of walls (obstacles)
+  const wallsArray: Mesh[] = [];
 
   //for number of spheres defined
   //calculate starting velocities and push into the array
@@ -38,9 +42,9 @@ const Sphere = (props: SphereProps) => {
     for (let i = 0; i < props.numberOfSpheres; i++) {
       const velocity = new Vector3(
         //get random velocities values for X, Y and Z component
-        (Math.random() / 50) * randomIntFromInterval(-1, 1),
-        (Math.random() / 50) * randomIntFromInterval(-1, 1),
-        (Math.random() / 50) * randomIntFromInterval(-1, 1),
+        (Math.random() / 30) * randomIntFromInterval(-3, 3),
+        (Math.random() / 30) * randomIntFromInterval(-3, 3),
+        (Math.random() / 30) * randomIntFromInterval(-3, 3),
       );
       //push vectors to the velocities array
       velocities.push(velocity);
@@ -67,6 +71,15 @@ const Sphere = (props: SphereProps) => {
       instance.current.setMatrixAt(i, tempSpheres.matrix);
     }
     instance.current.instanceMatrix.needsUpdate = true;
+    //go through the walls (obstacles) and update the matrix for accurate calculations
+    props.wallsGroup.traverse((wall) => {
+      if (wall instanceof Mesh) {
+        wall.updateMatrixWorld();
+        wall.geometry.boundingBox?.applyMatrix4(wall.matrixWorld);
+        //push wall to the wallsArray for calculating intersections between spheres and walls
+        wallsArray.push(wall);
+      }
+    });
   }, []);
 
   //each frame update the position of the the sphere instances by adding velocities for the instance
@@ -81,6 +94,45 @@ const Sphere = (props: SphereProps) => {
       //set new positions into the sphere instance matrix
       matrix.setPosition(position);
       instance.current.setMatrixAt(i, matrix);
+      //compute bounding box for the instance
+      instance.current.geometry.computeBoundingBox();
+      //get bounding box
+      const sphereBox = instance.current.geometry.boundingBox;
+      //apply transformed matrix to the sphere (to follow the position change properly)
+      sphereBox?.applyMatrix4(matrix);
+      //for each wall check if the sphere bounding box intersects wall bounding box
+      for (const wall of wallsArray) {
+        const wallBox = wall.geometry.boundingBox;
+        //if the bounding boxes intersect
+        //check for the wall name (detect on which wall intersection occured)
+        //depending on which wall the collision is detected switch the velocity component to opposite direction
+        //front and back walls -> z component of velocity
+        //right and left walls -> x component of velocity
+        //top and back bottom -> y component of velocity
+        if (sphereBox?.intersectsBox(wallBox!)) {
+          /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
+          switch (wall.name) {
+            case 'wall_front':
+              velocities[i].z *= -1;
+              break;
+            case 'wall_back':
+              velocities[i].z *= -1;
+              break;
+            case 'wall_right':
+              velocities[i].x *= -1;
+              break;
+            case 'wall_left':
+              velocities[i].x *= -1;
+              break;
+            case 'wall_top':
+              velocities[i].y *= -1;
+              break;
+            case 'wall_bottom':
+              velocities[i].y *= -1;
+              break;
+          }
+        }
+      }
     }
     instance.current.instanceMatrix.needsUpdate = true;
   });
